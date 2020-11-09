@@ -1105,6 +1105,132 @@ namespace OpenTokSDKTest
         }
 
         [Fact]
+        public void ForceMuteOpenTokArgumentTest()
+        {
+            string streamId = "";
+            string sessionId = "";
+
+            var mockClient = new Mock<HttpClient>();
+            mockClient.Setup(httpClient => httpClient.Post(It.IsAny<string>(),
+                It.IsAny<Dictionary<string, string>>(),It.IsAny<Dictionary<string,object>>()));
+
+            OpenTok opentok = new OpenTok(apiKey, apiSecret);
+            opentok.Client = mockClient.Object;
+            try
+            {
+                opentok.ForceMute(sessionId, streamId);
+            }
+            catch (OpenTokArgumentException)
+            {
+                Assert.True(true);
+            }
+        }
+
+        [Fact]
+        public void ForceMuteTest()
+        {
+            string streamId = "3b0c260e-801e-47e9-a245-4ee3ffd9bd6f";
+            string sessionId = "1_MX4xMjM0NTZ-flNhdCBNYXIgMTUgMTQ6NDI6MjMgUERUIDIwMTR-MC40OTAxMzAyNX";
+
+            var mockClient = new Mock<HttpClient>();
+            mockClient.Setup(httpClient => httpClient.Post(It.IsAny<string>(),
+                It.IsAny<Dictionary<string, string>>(),It.IsAny<Dictionary<string,object>>()));
+
+            OpenTok opentok = new OpenTok(apiKey, apiSecret);
+            opentok.Client = mockClient.Object;
+            opentok.ForceMute(sessionId, streamId);
+
+            string expectedUrl = string.Format("v2/project/{0}/session/{1}/stream/{2}/mute", apiKey, sessionId, streamId);
+            mockClient.Verify(httpClient => httpClient.Post(It.Is<string>(
+                url => url.Equals(expectedUrl)),
+                It.IsAny<Dictionary<string, string>>(),null), Times.Once());
+        }
+
+        [Fact]
+        public void ForceMuteAllOpenTokArgumentTest()
+        {
+            string[] excludedStreamIds = new string[] { };
+            string sessionId = "";
+
+            var mockClient = new Mock<HttpClient>();
+            mockClient.Setup(httpClient => httpClient.Post(It.IsAny<string>(),
+                It.IsAny<Dictionary<string, string>>(), It.IsAny<Dictionary<string, object>>()));
+
+            OpenTok opentok = new OpenTok(apiKey, apiSecret);
+            opentok.Client = mockClient.Object;
+            try
+            {
+                opentok.ForceMuteAll(sessionId, excludedStreamIds);
+            }
+            catch (OpenTokArgumentException)
+            {
+                Assert.True(true);
+            }
+        }
+
+        [Fact]
+        public void ForceMuteAllTest()
+        {
+            string[] excludedStreamIds = { "3b0c260e-801e-47e9-a245-4ee3ffd9bd6f", "1", "2" };
+            string sessionId = "1_MX4xMjM0NTZ-flNhdCBNYXIgMTUgMTQ6NDI6MjMgUERUIDIwMTR-MC40OTAxMzAyNX";
+
+            var mockClient = new Mock<HttpClient>();
+            mockClient.Setup(httpClient => httpClient.Post(It.IsAny<string>(),
+                It.IsAny<Dictionary<string, string>>(), It.IsAny<Dictionary<string, object>>()));
+
+            OpenTok opentok = new OpenTok(apiKey, apiSecret);
+            opentok.Client = mockClient.Object;
+            opentok.ForceMuteAll(sessionId, excludedStreamIds);
+
+            var expectedDict = new Dictionary<string, object>() { { "excluded", excludedStreamIds } };
+            string expectedUrl = string.Format("v2/project/{0}/session/{1}/mute", apiKey, sessionId);
+            mockClient.Verify(httpClient => httpClient.Post(It.Is<string>(
+                url => url.Equals(expectedUrl)),
+                It.IsAny<Dictionary<string, string>>(), It.Is<Dictionary<string, object>>(dict => dict.All(x=>(expectedDict.ContainsKey(x.Key) && (x.Value as string[]).ToList().All(z=>(expectedDict[x.Key] as string[]).ToList().Any(y=>z==y)))))), Times.Once()); ;
+        }
+
+        [Fact]
+        public void ForceMuteAllNoExcludedOpenTokArgumentTest()
+        {
+            string sessionId = "";
+
+            var mockClient = new Mock<HttpClient>();
+            mockClient.Setup(httpClient => httpClient.Post(It.IsAny<string>(),
+                It.IsAny<Dictionary<string, string>>(), It.IsAny<Dictionary<string, object>>()));
+
+            OpenTok opentok = new OpenTok(apiKey, apiSecret);
+            opentok.Client = mockClient.Object;
+            try
+            {
+                opentok.ForceMuteAll(sessionId);
+            }
+            catch (OpenTokArgumentException)
+            {
+                Assert.True(true);
+            }
+        }
+
+        [Fact]
+
+        public void ForceMuteAllNoExcludedTest()
+        {
+            string sessionId = "1_MX4xMjM0NTZ-flNhdCBNYXIgMTUgMTQ6NDI6MjMgUERUIDIwMTR-MC40OTAxMzAyNX";
+
+            var mockClient = new Mock<HttpClient>();
+            mockClient.Setup(httpClient => httpClient.Post(It.IsAny<string>(),
+                It.IsAny<Dictionary<string, string>>(), It.IsAny<Dictionary<string, object>>()));
+
+            OpenTok opentok = new OpenTok(apiKey, apiSecret);
+            opentok.Client = mockClient.Object;
+            opentok.ForceMuteAll(sessionId);
+
+            string expectedUrl = string.Format("v2/project/{0}/session/{1}/mute", apiKey, sessionId);
+            mockClient.Verify(httpClient => httpClient.Post(It.Is<string>(
+                url => url.Equals(expectedUrl)),
+                It.IsAny<Dictionary<string, string>>(),It.IsAny<Dictionary<string,object>>()), Times.Once());
+        }
+
+        [Fact]
         public void SignalOpenTokArgumentExceptionTest()
         {
             string sessionId = "";
