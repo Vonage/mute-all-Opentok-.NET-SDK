@@ -457,7 +457,7 @@ namespace OpenTokSDK
         }
 
         /**
-          * Force Mute a specific client connected to an OpenTok session.
+          * Force Mute a specific stream connected to an OpenTok session.
           *
           * @param sessionId The session ID corresponding to the session.
           * 
@@ -484,7 +484,7 @@ namespace OpenTokSDK
           *
           * @param sessionId The session ID corresponding to the session.
           * 
-          * @param excludedStreamIds The stream Id of the stream in a session to exclud from mute..
+          * @param excludedStreamIds The stream Ids of the streams in a session to exclud from mute..
          */
         public void ForceMuteAll(string sessionId, string[] excludedStreamIds = null)
         {
