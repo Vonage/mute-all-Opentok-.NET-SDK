@@ -230,6 +230,7 @@ Your application server can Mute all streams but excluded streams from an OpenTo
 
 ```csharp
 // Force mute all streams but excluded streams
+string[] excludedSteamIds = {"stream1","stream2"};
 OpenTok.ForceMuteAll(sessionId, excludedSteamIds);
 ```
 
