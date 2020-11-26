@@ -206,6 +206,34 @@ Your application server can disconnect a client from an OpenTok session by calli
 OpenTok.ForceDisconnect(sessionId, connectionId);
 ```
 
+### Force Mute
+
+Your application server can Mute a stream from an OpenTok session by calling the `ForceMute(sessionId, streamId)` method of the `OpenTok` class.
+
+```csharp
+// Force mute a stream
+OpenTok.ForceMute(sessionId, streamId);
+```
+
+### Force Mute All
+
+Your application server can Mute all streams from an OpenTok session by calling the `ForceMuteAll(sessionId)` method of the `OpenTok` class.
+
+```csharp
+// Force mute all streams
+OpenTok.ForceMuteAll(sessionId);
+```
+
+### Force Mute All Excluded Streams
+
+Your application server can Mute all streams but excluded streams from an OpenTok session by calling the `ForceMuteAll(sessionId, excludedStreamIds)` method of the `OpenTok` class.
+
+```csharp
+// Force mute all streams but excluded streams
+string[] excludedSteamIds = {"stream1","stream2"};
+OpenTok.ForceMuteAll(sessionId, excludedSteamIds);
+```
+
 ### Sending Signals
 
 Once a Session is created, you can send signals to everyone in the session or to a specific connection. You can send a signal by calling the `Signal(sessionId, signalProperties, connectionId)` method of the `OpenTok` class.

@@ -189,7 +189,7 @@ namespace OpenTokSDK
          *
          *   <li> <code>Role.MODERATOR</code> &mdash; In addition to the privileges granted to a
          *     publisher, in clients using the OpenTok.js library, a moderator can call the
-         *     <code>forceUnpublish()</code> and <code>forceDisconnect()</code> method of the
+         *     <code>forceMute()</code>,<code>forceMuteAll()</code>,<code>forceUnpublish()</code> and <code>forceDisconnect()</code> method of the
          *     Session object.</li>
          * </ul>
          *
@@ -454,6 +454,57 @@ namespace OpenTokSDK
             string url = string.Format("v2/project/{0}/session/{1}/connection/{2}", this.ApiKey, sessionId, connectionId);
             var headers = new Dictionary<string, string>();
             Client.Delete(url, headers);
+        }
+
+        /**
+          * Force Mute a specific stream connected to an OpenTok session.
+          *
+          * @param sessionId The session ID corresponding to the session.
+          * 
+          * @param streamId The stream Id of the stream in a session..
+         */
+        public void ForceMute(string sessionId, string streamId)
+        {
+            if (String.IsNullOrEmpty(sessionId) || String.IsNullOrEmpty(streamId))
+            {
+                throw new OpenTokArgumentException("The sessionId or streamId cannot be null or empty");
+            }
+
+            if (!OpenTokUtils.ValidateSession(sessionId))
+            {
+                throw new OpenTokArgumentException("Invalid session Id");
+            }
+            string url = string.Format("v2/project/{0}/session/{1}/stream/{2}/mute", this.ApiKey, sessionId, streamId);
+            var headers = new Dictionary<string, string>();
+            Client.Post(url, headers,null);
+        }
+
+        /**
+          * Force Mute a all clients connected to an OpenTok session.
+          *
+          * @param sessionId The session ID corresponding to the session.
+          * 
+          * @param excludedStreamIds The stream Ids of the streams in a session to exclud from mute..
+         */
+        public void ForceMuteAll(string sessionId, string[] excludedStreamIds = null)
+        {
+            if (String.IsNullOrEmpty(sessionId))
+            {
+                throw new OpenTokArgumentException("The sessionId cannot be null or empty");
+            }
+
+            if (!OpenTokUtils.ValidateSession(sessionId))
+            {
+                throw new OpenTokArgumentException("Invalid session Id");
+            }
+            var body = new Dictionary<string, object>();
+            if(excludedStreamIds != null)
+            {
+                body.Add("excluded", excludedStreamIds);
+            }
+            string url = string.Format("v2/project/{0}/session/{1}/mute", this.ApiKey, sessionId);
+            var headers = new Dictionary<string, string>();
+            Client.Post(url, headers, body);
         }
 
         /**
